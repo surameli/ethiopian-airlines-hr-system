@@ -94,3 +94,54 @@ export const getAllJobsHR = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+// PATCH /api/jobs/:id/close
+export const closeJob = async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id);
+
+    if (!job) {
+      return res.status(404).json({
+        message: 'Job not found',
+      });
+    }
+
+    job.isOpen = false;
+
+    await job.save();
+
+    res.json({
+      message: 'Vacancy closed successfully',
+      job,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+// PATCH /api/jobs/:id/open
+export const openJob = async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id);
+
+    if (!job) {
+      return res.status(404).json({
+        message: 'Job not found',
+      });
+    }
+
+    job.isOpen = true;
+
+    await job.save();
+
+    res.json({
+      message: 'Vacancy reopened successfully',
+      job,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};

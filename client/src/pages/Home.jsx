@@ -3,6 +3,7 @@ import jobCatalog from "../assets/images/JobCatalogue.jpg";
 import aiScreening from "../assets/images/AI.png";
 import onlineExam from "../assets/images/AI-quiz.png";
 import hrReview from "../assets/images/HR-Manager.png";
+import Footer from '../components/Footer';
 
 export default function Home() {
   return (
@@ -123,6 +124,9 @@ export default function Home() {
     </div>
   </div>
 </section>
+
     </main>
+    
   );
+   
 }

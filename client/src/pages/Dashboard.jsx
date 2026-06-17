@@ -166,6 +166,22 @@ function HRDashboard({ user }) {
     }
   };
 
+  const toggleVacancy = async (jobId, isOpen) => {
+  try {
+    await api.patch(`/jobs/${jobId}/${isOpen ? 'close' : 'open'}`);
+
+    setJobs((prev) =>
+      prev.map((job) =>
+        job._id === jobId
+          ? { ...job, isOpen: !isOpen }
+          : job
+      )
+    );
+  } catch (err) {
+    alert(err.response?.data?.message || 'Failed to update vacancy.');
+  }
+};
+
   if (loadingJobs) return <Loader />;
 
   const selectedJobObj = jobs.find((j) => j._id === selectedJob);
@@ -228,28 +244,55 @@ function HRDashboard({ user }) {
                 <h2>{selectedJobObj?.title}</h2>
 
                 <div className="panel-actions">
-                  <label className="filter-label">
-                    Min Total Score:
-                    <input
-                      type="number"
-                      min="0"
-                      max="100"
-                      value={minScore}
-                      onChange={(e) => setMinScore(e.target.value)}
-                      className="score-filter-input"
-                    />
-                  </label>
-                  <button className="btn-outline btn-sm" onClick={() => loadApplications(selectedJob)}>
-                    Filter
-                  </button>
-                  <button
-                    className="btn-primary btn-sm"
-                    onClick={() => handleGenerateExam(selectedJob)}
-                    disabled={generatingExam}
-                  >
-                    {generatingExam ? 'Generating…' : '🤖 Generate Exam'}
-                  </button>
-                </div>
+
+  <label className="filter-label">
+    Min Total Score:
+    <input
+      type="number"
+      min="0"
+      max="100"
+      value={minScore}
+      onChange={(e) => setMinScore(e.target.value)}
+      className="score-filter-input"
+    />
+  </label>
+
+  <button
+    className="btn-outline btn-sm"
+    onClick={() => loadApplications(selectedJob)}
+  >
+    Filter
+  </button>
+
+  <button
+    className="btn-primary btn-sm"
+    onClick={() => handleGenerateExam(selectedJob)}
+    disabled={generatingExam}
+  >
+    {generatingExam ? 'Generating...' : '🤖 Generate Exam'}
+  </button>
+
+  {selectedJobObj?.isOpen ? (
+    <button
+      className="btn-danger btn-sm"
+      onClick={() =>
+        toggleVacancy(selectedJobObj._id, true)
+      }
+    >
+      🔒 Close Vacancy
+    </button>
+  ) : (
+    <button
+      className="btn-success btn-sm"
+      onClick={() =>
+        toggleVacancy(selectedJobObj._id, false)
+      }
+    >
+      🔓 Reopen Vacancy
+    </button>
+  )}
+
+</div>
               </div>
 
               {examMsg && <div className="alert alert-info">{examMsg}</div>}

@@ -2,14 +2,22 @@ import { Link } from 'react-router-dom';
 
 export default function JobCard({ job }) {
   const deadline = new Date(job.deadline);
-  const isExpired = deadline < new Date();
+
+  const isClosed =
+    !job.isOpen || deadline < new Date();
 
   return (
     <div className="job-card">
+
       <div className="job-card-header">
-        <h3 className="job-title">{job.title}</h3>
-        <span className={`badge ${isExpired ? 'badge-closed' : 'badge-open'}`}>
-          {isExpired ? 'Closed' : 'Open'}
+        <h3>{job.title}</h3>
+
+        <span
+          className={`badge ${
+            isClosed ? 'badge-closed' : 'badge-open'
+          }`}
+        >
+          {isClosed ? 'Closed' : 'Open'}
         </span>
       </div>
 
@@ -19,16 +27,25 @@ export default function JobCard({ job }) {
         <span>🕒 {job.type}</span>
       </div>
 
-      <p className="job-desc">{job.description.substring(0, 120)}...</p>
+      <p className="job-desc">
+        {job.description.substring(0, 120)}...
+      </p>
 
       <div className="job-card-footer">
-        <span className="job-deadline">
-          Deadline: {deadline.toLocaleDateString()}
+        <span>
+          Deadline:
+          {' '}
+          {deadline.toLocaleDateString()}
         </span>
-        <Link to={`/jobs/${job._id}`} className="btn-primary">
+
+        <Link
+          to={`/jobs/${job._id}`}
+          className="btn-primary"
+        >
           View Details
         </Link>
       </div>
+
     </div>
   );
 }
