@@ -1,5 +1,15 @@
+# Dependencies
 node_modules/
+**/node_modules/
+
+# Build output
 dist/
+build/
+
+# Environment variables
 .env
+**/.env
+
+# Uploads
 uploads/*
 !uploads/.gitkeep
