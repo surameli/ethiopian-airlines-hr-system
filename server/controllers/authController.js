@@ -4,6 +4,7 @@ import User from '../models/User.js';
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
+
 // POST /api/auth/register
 export const register = async (req, res) => {
   try {
